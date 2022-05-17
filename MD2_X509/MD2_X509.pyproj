@@ -34,6 +34,12 @@
     <Compile Include="menu.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="name.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tbscertificate.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="verify.py">
       <SubType>Code</SubType>
     </Compile>
