@@ -3,6 +3,7 @@ Programma ir uzrakstīta valodā Python 3.10 un izmanto vairākas bibliotēkas t
 	- datetime	Sērijas numura aprēķināšanai.
 	- json		Nolasa JSON formāta failus.
 	- os		Tiek izmantots darbībām ar failiem.
+	- sys		Pārtrauc programmas darbību, ja tiek sastapta tāda kļūda ievades datos, ka turpināt darbu nav vērts.
 	- typing	Ļauj norādīt datu tipus funkcijām. Pirmkoda lasāmības uzlabošanai.
 	
 ----

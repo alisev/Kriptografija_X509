@@ -49,7 +49,8 @@ class TBScertificate(object):
         self.issuer = Name(self._issuer)
         self.validity = self._set_validity()
         self.subject = self._set_subject(data['subject'])
-        self.subject_public_key = self._set_subject_public_key() # TODO
+        self.subject_public_key = self._set_subject_public_key() # TODO funkcija
+        # TODO Lauki extensions un unique_identifier pašlaik netiek speciāli apstrādāti.
         if 'extensions' in data:
             self.extensions = data['extensions']
         elif 'unique_id' in data:
@@ -91,8 +92,9 @@ class TBScertificate(object):
     def _set_subject_public_key(self) -> dict:
         """ Iestata informāciju par publisko atslēgu. """
         algorithm = self.signature['public']
+        key = None # TODO, vai tas ir pašai jāaprēķina, vai to lietot'js norāda?
         return {'algorithm': algorithm,
-                'subject_public_key': None}
+                'subject_public_key': key}
 
     def _set_validity(self) -> dict:
         """ Ievada sertifikāta derīguma termiņu. Izmanto YYMMDDHHMMSSZ formātu.

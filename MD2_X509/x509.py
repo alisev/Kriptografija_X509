@@ -35,27 +35,17 @@ class x509(object):
     def create(self, filename: str):
         """ Izgatavo sertifikātu. """
         self.TBScertificate = tbs.TBScertificate(filename)
-        self.signature_algorithm = self._set_signature_algorithm()
-        self.signature_value = self._compute_signature_value()
+        self.signature_algorithm = self._set_signature_algorithm() # TODO funkcija
+        self.signature_value = self._compute_signature_value() # TODO funkcija
 
     def _compute_signature_value(self) -> bytes:
         """ Aprēķina paraksta vērtību. """
-
-        """
-        This signature value is encoded as a BIT STRING and included in the
-        signature field. The details of this process are specified for each
-        of the algorithms listed in [RFC3279], [RFC4055], and [RFC4491].
-
-        By generating this signature, a CA certifies the validity of the
-        information in the tbsCertificate field. In particular, the CA
-        certifies the binding between the public key material and the subject
-        of the certificate.
-        """
-        pass
+        signature = None # TODO jāaprēķina
+        return signature
 
     def _set_signature_algorithm(self) -> dict:
         """ Iestata informāciju par paraksta algoritmu. """
-        params = []
+        params = [] # TODO var būt nepieciešamība iegūt un norādīt papildus parametrus.
         return {'algorithm': self.TBScertificate.signature,
                 'parameters': params}
 

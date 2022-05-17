@@ -31,3 +31,14 @@ Technical requirements:
 	
  - The verification program should be able read both the certificate and private key from the files you had created in previous step.
 	- The same applies to encryption/decryption program for step 3, which in addition has to be able to read and store encrypted/non-encrypted messages in files.
+
+--
+MD2_X509
+|___menu
+|   |___inputfilename
+|   |___inputoption
+|   |___x509
+|   |   |___tbscertificate
+|   |       |___name
+|   |___verify
+|   |___cipher
