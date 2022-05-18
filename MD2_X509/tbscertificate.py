@@ -1,6 +1,3 @@
-from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA3_256
-
 from datetime import datetime
 import json
 import sys

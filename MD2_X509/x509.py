@@ -1,4 +1,3 @@
-from Crypto.Signature import PKCS1_v1_5
 import typing
 
 import tbscertificate as tbs
@@ -19,7 +18,7 @@ class x509(object):
         """ Izgatavo sertifikātu. """
         self.TBScertificate = tbs.TBScertificate(filename)
         self.signature_algorithm = self._set_signature_algorithm()
-        self.signature_value = self._set_signature_value() # TODO funkcija
+        #self.signature_value = self._set_signature_value() # TODO funkcija
 
     def _set_signature_algorithm(self) -> dict:
         """ Iestata informāciju par paraksta algoritmu. """
@@ -34,7 +33,7 @@ class x509(object):
         print(key)
         algorithm = self.TBScertificate.get_hash_algorithm()
         hash = algorithm(message) # Nestrādā, trūkst key n 
-        signer = PKCS1_v1_5.new(key)
+        signer = PKCS1_v1_5.new(key) # nomainīt algoritmu
         signature = signer.sign(hash)
         return signature
 
