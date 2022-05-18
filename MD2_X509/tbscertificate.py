@@ -1,3 +1,6 @@
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA3_256
+
 from datetime import datetime
 import json
 import sys
@@ -14,10 +17,10 @@ class TBScertificate(object):
         "DN": "Alise Linda Viluma",
 	    "CN": "Alise Linda Viluma"
         }
-    _public_key = 2048
+    _public_key_length = 2048
     _time_base = datetime(2022, 5, 15)
-    _valid_digest = ['SHA-3']
-    _valid_signer = ['RSA']
+    _valid_digest = {'SHA-3': SHA3_256.new}
+    _valid_signer = {'RSA': RSA.generate}
 
     def __init__(self, filename: str):
         # Obligātie lauki
@@ -34,6 +37,18 @@ class TBScertificate(object):
         # Iestata laukus
         self._read_file(filename)
 
+    def get_hash_algorithm(self):
+        """ Funkcija, kas atgriež vajadzīgo hash algoritmu. """
+        algorithm_name = self.signature['hash']
+        algorithm = self._valid_digest[algorithm_name]
+        return algorithm
+
+    def get_public_key_algorithm(self):
+        """ Funkcija, kas atgriež vajadzīgo paraksta algoritmu. """
+        algorithm_name = self.signature['public']
+        algorithm = self._valid_signer[algorithm_name]
+        return algorithm
+
     def _is_seconds_field_valid(self, date: datetime) -> bool:
         """ Pārbauda, vai sekunžu vērtība ir derīga. """
         if date.strftime("%S") != "00":
@@ -49,7 +64,7 @@ class TBScertificate(object):
         self.issuer = Name(self._issuer)
         self.validity = self._set_validity()
         self.subject = self._set_subject(data['subject'])
-        self.subject_public_key = self._set_subject_public_key() # TODO funkcija
+        self.subject_public_key = self._set_subject_public_key()
         # TODO Lauki extensions un unique_identifier pašlaik netiek speciāli apstrādāti.
         if 'extensions' in data:
             self.extensions = data['extensions']
@@ -91,8 +106,8 @@ class TBScertificate(object):
 
     def _set_subject_public_key(self) -> dict:
         """ Iestata informāciju par publisko atslēgu. """
-        algorithm = self.signature['public']
-        key = None # TODO, vai tas ir pašai jāaprēķina, vai to lietot'js norāda?
+        algorithm = self.get_public_key_algorithm()
+        key = algorithm(self._public_key_length)
         return {'algorithm': algorithm,
                 'subject_public_key': key}
 
