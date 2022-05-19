@@ -1,4 +1,3 @@
-from cryptography import x509
 import typing
 
 import tbscertificate as tbs
@@ -8,9 +7,8 @@ import writef
 class my_x509(object):
     def __init__(self, filename: str):
         self.TBScertificate = None
+        self.private_key = None
         self.certificate = None
-        self.signature_algorithm = None
-        self.signature_value = None
         self._create(filename)
 
     def save(self):
@@ -18,30 +16,23 @@ class my_x509(object):
         _output_dir = "output"
         writef.write_file(
             self.certificate,
-            self.TBScertificate.subject_public_key['subject_private_key'],
-            self.TBScertificate.serial_number
+            self.private_key,
+            self.certificate.serial_number
             )
 
     def _create(self, filename: str):
         """ Izgatavo sertifikātu. """
         self.TBScertificate = tbs.TBScertificate(filename)
-        self.certificate = self.TBScertificate.build()
-        self.signature_algorithm = self._set_signature_algorithm()
-        self.signature_value = self._set_signature_value()
+        self.private_key = self.TBScertificate.subject_public_key['subject_private_key']
+        self.certificate = self._set_certificate()
 
-    def _set_signature_algorithm(self) -> dict:
-        """ Iestata informāciju par paraksta algoritmu. """
-        params = [] # TODO var būt nepieciešams iegūt un norādīt papildus parametrus.
-        return {'signature': self.TBScertificate.signature,
-                'parameters': params}
-
-    def _set_signature_value(self) -> x509.Certificate:
+    def _set_certificate(self):
         """ Paraksta sertifikātu. """
-        private_key = self.TBScertificate.subject_public_key['subject_private_key']
-        algorithm_name = self.signature_algorithm['signature']['hash']
+        algorithm_name = self.TBScertificate.signature['hash']
         algorithm = self.TBScertificate._valid_digest[algorithm_name]
-        certificate = self.certificate.sign(
-            private_key = private_key,
+        certificate_build = self.TBScertificate.build()
+        certificate = certificate_build.sign(
+            private_key = self.private_key,
             algorithm = algorithm
             )
         return certificate

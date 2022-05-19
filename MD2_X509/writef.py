@@ -45,6 +45,6 @@ def write_key_file(private_key: _RSAPrivateKey, filename: str, folder: str = "ou
 # -- Rezultātu ierakstīšana datnē
 def write_file(certificate: x509.CertificateBuilder, private_key: _RSAPrivateKey, serial_num: int):
     filename_cert, filename_key = create_filenames(serial_num)
-    #write_certificate_file(certificate, filename_cert)
+    write_certificate_file(certificate, filename_cert)
     write_key_file(private_key, filename_key)
 
