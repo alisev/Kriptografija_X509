@@ -1,3 +1,7 @@
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import rsa
+
 from datetime import datetime
 import json
 import sys
@@ -7,6 +11,7 @@ from name import Name
     
 # -- Sagatavo vēl neparakstītu sertifikātu.
 class TBScertificate(object):
+    _exponent = 65537
     _issuer = {
         "C": "LV",
 	    "O": "AV17098",
@@ -16,8 +21,8 @@ class TBScertificate(object):
         }
     _public_key_length = 2048
     _time_base = datetime(2022, 5, 15)
-    _valid_digest = {'SHA-3': SHA3_256.new}
-    _valid_signer = {'RSA': RSA.generate}
+    _valid_digest = {'SHA-3': hashes.SHA256()}
+    _valid_signer = {'RSA': rsa.generate_private_key}
 
     def __init__(self, filename: str):
         # Obligātie lauki
@@ -33,6 +38,24 @@ class TBScertificate(object):
         self.unique_identifier = None # v2
         # Iestata laukus
         self._read_file(filename)
+
+    def build(self) -> x509.CertificateBuilder:
+        """ Izgatavo sertifikātu. """
+        subject_attribute = self.subject.build_name_attribs()
+        issuer_attribute = self.issuer.build_name_attribs()
+
+        builder = x509.CertificateBuilder()
+        builder = builder.subject_name(x509.Name(subject_attribute))
+        builder = builder.issuer_name(x509.Name(issuer_attribute))
+        builder = builder.not_valid_before(self.validity['notBefore'])
+        builder = builder.not_valid_after(self.validity['notAfter'])
+        builder = builder.serial_number(self.serial_number)
+        builder = builder.public_key(self.subject_public_key['subject_public_key'])
+        if self.version == 2: # TODO
+            raise NotImplementedError("TODO: Pievienot extensions.")
+        if self.version >= 1:
+            raise NotImplementedError("TODO: Pievienot unique identifier.")
+        return builder
 
     def get_hash_algorithm(self):
         """ Funkcija, kas atgriež vajadzīgo hash algoritmu. """
@@ -61,11 +84,11 @@ class TBScertificate(object):
         self.issuer = Name(self._issuer)
         self.validity = self._set_validity()
         self.subject = self._set_subject(data['subject'])
-        self.subject_public_key = self._set_subject_public_key()
+        self.subject_public_key = self._set_subject_public_key() # TODO
         # TODO Lauki extensions un unique_identifier pašlaik netiek speciāli apstrādāti.
         if 'extensions' in data:
             self.extensions = data['extensions']
-        elif 'unique_id' in data:
+        if 'unique_id' in data:
             self.unique_identifier = data['unique_id']
         self.version = self._set_version()
 
@@ -103,24 +126,33 @@ class TBScertificate(object):
 
     def _set_subject_public_key(self) -> dict:
         """ Iestata informāciju par publisko atslēgu. """
+        algorithm_name = self.signature['str']
         algorithm = self.get_public_key_algorithm()
-        key = algorithm(self._public_key_length)
-        return {'algorithm': algorithm,
-                'subject_public_key': key}
+        private_key = algorithm(
+            public_exponent = self._exponent,
+            key_size = self._public_key_length
+            )
+        public_key = private_key.public_key()
+        return {'algorithm': algorithm_name,
+                'subject_public_key': public_key,
+                'subject_private_key': private_key
+                }
 
     def _set_validity(self) -> dict:
         """ Ievada sertifikāta derīguma termiņu. Izmanto YYMMDDHHMMSSZ formātu.
             Gadījumā, ja sekunžu vērtība ir 00, tā tiek nomainīta uz 01, lai sertifikāts būtu derīgs."""
         _format = "%Y%m%d%H%M%SZ"
         _valid_years = 50
-        now = datetime.now()
-        if not self._is_seconds_field_valid(now):
-            now = now.replace(seconds = 1)
-        until = now.replace(year = _valid_years + now.year)
-        valid_from = now.strftime(_format)
-        valid_until = until.strftime(_format)
-        return {'notBefore': valid_from,
-                'notAfter': valid_until}
+        today = datetime.today()
+        if not self._is_seconds_field_valid(today):
+            today = today.replace(seconds = 1)
+        until = today.replace(year = _valid_years + today.year)
+        valid_from_str = today.strftime(_format)
+        valid_until_str = until.strftime(_format)
+        return {'notBefore': today,
+                'notAfter': until,
+                'notBeforeStr': valid_from_str,
+                'notAfterStr': valid_until_str}
 
     def _set_version(self) -> int:
         """ Piešķir atbilstošo versijas vērtību. """

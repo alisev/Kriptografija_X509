@@ -43,6 +43,9 @@
     <Compile Include="verify.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="writef.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="x509.py">
       <SubType>Code</SubType>
     </Compile>

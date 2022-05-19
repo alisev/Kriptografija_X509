@@ -1,7 +1,7 @@
 Programma ir uzrakstīta valodā Python 3.10 un izmanto vairākas bibliotēkas tās darbības nodrošināšanai:
-	- Crypto	Pycryptodome bibliotēka. Nodrošina iekodēšanu un atkodēšanu.
-	- datetime	Sērijas numura aprēķināšanai.
-	- json		Nolasa JSON formāta failus.
+	- cryptography	Nodrošina sertifikāta izstrādi un saglabāšanu.
+	- datetime	Sērijas numura un sertifikāta derīguma termiņa aprēķināšanai.
+	- json		Nolasa JSON formāta ievades failus, kuri savukārt tiek izmantoti uzdevuma pirmā soļa izpildei.
 	- os		Tiek izmantots darbībām ar failiem.
 	- sys		Pārtrauc programmas darbību, ja tiek sastapta tāda kļūda ievades datos, ka turpināt darbu nav vērts.
 	- typing	Ļauj norādīt datu tipus funkcijām. Pirmkoda lasāmības uzlabošanai.

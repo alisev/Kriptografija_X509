@@ -1,11 +1,30 @@
+from cryptography import x509
+from cryptography.x509.oid import NameOID
 import typing
 
 # -- Name klase, kas tiek izmantota, lai aprakstītu sertifikāta izdēvēju un lietotāju.
 class Name(object):
-    _identifiers = ['C', 'O', 'OU', 'DN', 'S', 'CN', 'SN']
+    _identifiers = {
+        'C': NameOID.COUNTRY_NAME,
+        'O': NameOID.ORGANIZATION_NAME,
+        'OU': NameOID.ORGANIZATIONAL_UNIT_NAME,
+        'DN': NameOID.DN_QUALIFIER,
+        'S': NameOID.JURISDICTION_STATE_OR_PROVINCE_NAME,
+        'CN': NameOID.COMMON_NAME,
+        'SN': NameOID.SERIAL_NUMBER
+        }
 
     def __init__(self, data: dict):
+        self.data = None
         self._set_data(data)
+
+    def build_name_attribs(self) -> list:
+        """ Pārveido objektu par NameAttribute. """
+        fields = []
+        for attrib in self.data:
+            field = x509.NameAttribute(self._identifiers[attrib], self.data[attrib])
+            fields.append(field)
+        return fields
 
     def convert_to_string(self) -> str:
         """ Konvertē datus uz STRING formātu. Neatbalstītās vērtības tiek izlaistas. """
