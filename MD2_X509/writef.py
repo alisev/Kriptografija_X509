@@ -1,5 +1,3 @@
-from cryptography import x509
-from cryptography.hazmat.backends.openssl.rsa import _RSAPrivateKey
 from cryptography.hazmat.primitives import serialization
 
 import os
@@ -27,13 +25,13 @@ def create_filenames(serial_num: int) -> tuple:
     return cert_filename, key_filename
 
 # -- Saglabā sertifikātu.
-def write_certificate_file(certificate: x509.CertificateBuilder, filename: str, folder: str = "output"):
+def write_certificate_file(certificate, filename: str, folder: str = "output"):
     destination = os.path.join(folder, filename)
     with open(destination, "wb") as f:
         f.write(certificate.public_bytes(encoding = serialization.Encoding.PEM))
 
 # -- Saglabā atslēgu.
-def write_key_file(private_key: _RSAPrivateKey, filename: str, folder: str = "output"):
+def write_key_file(private_key, filename: str, folder: str = "output"):
     destination = os.path.join(folder, filename)
     with open(destination, "wb") as f:
         f.write(private_key.private_bytes(
@@ -43,7 +41,7 @@ def write_key_file(private_key: _RSAPrivateKey, filename: str, folder: str = "ou
         ))
 
 # -- Rezultātu ierakstīšana datnē
-def write_file(certificate: x509.CertificateBuilder, private_key: _RSAPrivateKey, serial_num: int):
+def write_file(certificate, private_key, serial_num: int):
     filename_cert, filename_key = create_filenames(serial_num)
     write_certificate_file(certificate, filename_cert)
     write_key_file(private_key, filename_key)

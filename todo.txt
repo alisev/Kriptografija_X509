@@ -24,10 +24,11 @@ Technical requirements:
 --
 MD2_X509
 |___menu
-|   |___cipher
-|   |___inputfilename
-|   |___inputoption
-|   |___verify
-|   |___x509
-|       |___tbscertificate
-|           |___name
+   |___cipher
+   |___inputfilename
+   |___inputoption
+   |___verify
+   |___x509
+      |___tbscertificate
+      |  |___name
+      |___writef
