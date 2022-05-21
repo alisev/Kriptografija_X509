@@ -1,5 +1,5 @@
 from cryptography.hazmat.primitives import serialization
-
+from datetime import datetime
 import os
 import typing
 
@@ -24,6 +24,14 @@ def create_filenames(serial_num: int) -> tuple:
     key_filename = create_filename(serial_num, _filename_blueprint['key'])
     return cert_filename, key_filename
 
+# -- Saglabā kodēto ziņojumu no 3. soļa.
+def save_message(output: bytes, folder: str = "output"):
+    now = datetime.now()
+    filename = "{}.bin".format(now.strftime("%Y%m%d%H%M%S"))
+    destination = os.path.join(folder, filename)
+    with open(destination, "wb") as f:
+        f.write(output)
+
 # -- Saglabā sertifikātu.
 def write_certificate_file(certificate, filename: str, folder: str = "output"):
     destination = os.path.join(folder, filename)
@@ -37,10 +45,11 @@ def write_key_file(private_key, filename: str, folder: str = "output"):
         f.write(private_key.private_bytes(
             encoding = serialization.Encoding.PEM,
             format = serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm = serialization.BestAvailableEncryption(b"secretmessage"),
-        ))
+            encryption_algorithm = serialization.NoEncryption()
+            )
+        )
 
-# -- Rezultātu ierakstīšana datnē
+# -- 1. soļa rezultātu ierakstīšana datnē
 def write_file(certificate, private_key, serial_num: int):
     filename_cert, filename_key = create_filenames(serial_num)
     write_certificate_file(certificate, filename_cert)

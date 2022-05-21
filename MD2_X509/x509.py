@@ -4,7 +4,7 @@ import tbscertificate as tbs
 import writef
 
 # -- X.509 sertifikāta izgatavošanai
-class my_x509(object):
+class myX509(object):
     def __init__(self, filename: str):
         self.TBScertificate = None
         self.private_key = None
@@ -13,7 +13,6 @@ class my_x509(object):
 
     def save(self):
         """ Saglabā sertifikātu un privāto atslēgu kā failus. """
-        _output_dir = "output"
         writef.write_file(
             self.certificate,
             self.private_key,
@@ -29,7 +28,7 @@ class my_x509(object):
     def _set_certificate(self):
         """ Paraksta sertifikātu. """
         algorithm_name = self.TBScertificate.signature['hash']
-        algorithm = self.TBScertificate._valid_digest[algorithm_name]
+        algorithm = self.TBScertificate._valid_digest[algorithm_name]()
         certificate_build = self.TBScertificate.build()
         certificate = certificate_build.sign(
             private_key = self.private_key,
@@ -38,5 +37,5 @@ class my_x509(object):
         return certificate
 
 def main(filename: str):
-    cert = my_x509(filename)
+    cert = myX509(filename)
     cert.save()

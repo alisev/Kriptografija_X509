@@ -2,17 +2,19 @@ import typing
 import os
 
 class inputFilename(object):
-    def __init__(self):
+    def __init__(self, request):
         self.error_message = "Fails neeksistē."
-        self.request = "Norādiet faila nosaukumu."
+        self.request = request
         self.validity_check = self._is_file_valid
 
     def input(self):
         filename = str(input(self.request))
         return filename
 
-    def _is_file_valid(self, filename: str) -> bool:
-        """ Pārbauda, vai dotais fails eksistē. """
-        if os.path.exists(filename):
-            return True
+    def _is_file_valid(self, filenames_str: str) -> bool:
+        """ Pārbauda, vai dotais fails/faili eksistē. """
+        filenames = filenames_str.split(',')
+        for filename in filenames:
+            if os.path.exists(filename):
+                return True
         return False

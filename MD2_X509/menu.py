@@ -10,15 +10,23 @@ import cipher
 _options = [
         {
             'title': "1 - X.509 sertifikāta izveidošana.",
+            'request': "Norādiet JSON faila nosaukumu: ",
             'function': x509.main
         },
         {
             'title': "2 - Sertifikāta pārbaude.",
+            'request': "Norādiet secīgi sertifikāta un privātās atslēgas faila nosaukumus, atdalot tos ar komatu: ",
             'function': verify.main
         },
         {
-            'title': "3 - Ziņojuma iekodēšana/dekodēšana.",
-            'function': cipher.main
+            'title': "3 - Ziņojuma iekodēšana.",
+            'request': "Norādiet secīgi sertifikāta un ziņojuma faila nosaukumus, atdalot tos ar komatu: ",
+            'function': cipher.main_enc
+        },
+        {
+            'title': "4 - Ziņojuma dekodēšana.",
+            'request': "Norādiet secīgi privātās atslēgas un ziņojuma faila nosaukumus, atdalot tos ar komatu: ",
+            'function': cipher.main_dec
         }
     ]
 _option_count = len(_options)

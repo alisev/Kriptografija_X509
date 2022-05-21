@@ -1,4 +1,4 @@
-from cryptography import x509
+from cryptography.x509 import NameAttribute
 from cryptography.x509.oid import NameOID
 import typing
 
@@ -22,7 +22,7 @@ class Name(object):
         """ Pārveido objektu par NameAttribute. """
         fields = []
         for attrib in self.data:
-            field = x509.NameAttribute(self._identifiers[attrib], self.data[attrib])
+            field = NameAttribute(self._identifiers[attrib], self.data[attrib])
             fields.append(field)
         return fields
 

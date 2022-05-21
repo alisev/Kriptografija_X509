@@ -21,7 +21,7 @@ class TBScertificate(object):
         }
     _public_key_length = 2048
     _time_base = datetime(2022, 5, 15)
-    _valid_digest = {'SHA-3': hashes.SHA256()}
+    _valid_digest = {'SHA-3': hashes.SHA256}
     _valid_signer = {'RSA': rsa.generate_private_key}
 
     def __init__(self, filename: str):
@@ -63,7 +63,7 @@ class TBScertificate(object):
         algorithm = self._valid_digest[algorithm_name]
         return algorithm
 
-    def get_public_key_algorithm(self):
+    def get_private_key_algorithm(self):
         """ Funkcija, kas atgriež vajadzīgo paraksta algoritmu. """
         algorithm_name = self.signature['public']
         algorithm = self._valid_signer[algorithm_name]
@@ -84,7 +84,7 @@ class TBScertificate(object):
         self.issuer = Name(self._issuer)
         self.validity = self._set_validity()
         self.subject = self._set_subject(data['subject'])
-        self.subject_public_key = self._set_subject_public_key() # TODO
+        self.subject_public_key = self._set_subject_public_key() # iekļauj arī private_key
         # TODO Lauki extensions un unique_identifier pašlaik netiek speciāli apstrādāti.
         if 'extensions' in data:
             self.extensions = data['extensions']
@@ -124,10 +124,10 @@ class TBScertificate(object):
             raise Exception('Norādītā lietotāja datiem ir jāsakrīt ar izdēvēja.')
         return subject
 
-    def _set_subject_public_key(self) -> dict:
+    def _set_subject_public_key(self) -> dict: 
         """ Iestata informāciju par publisko atslēgu. """
-        algorithm_name = self.signature['str']
-        algorithm = self.get_public_key_algorithm()
+        algorithm_name = self.signature['str'] 
+        algorithm = self.get_private_key_algorithm()
         private_key = algorithm(
             public_exponent = self._exponent,
             key_size = self._public_key_length

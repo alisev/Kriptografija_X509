@@ -12,6 +12,6 @@ class inputOption(object):
 
     def _is_option_valid(self, i: int) -> bool:
         """ Pārbauda, vai izvēlētā opcija ir derīga. """
-        if i >= 1 and i <= 3:
+        if i >= 1 and i <= 4:
             return True
         return False
