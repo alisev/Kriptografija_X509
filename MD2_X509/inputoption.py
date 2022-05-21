@@ -1,9 +1,9 @@
 import typing
 
 class inputOption(object):
-    def __init__(self):
+    def __init__(self, request: str = "Norādiet veicamo darbību."):
         self.error_message = "Ievadiet derīgu vērtību."
-        self.request = "Norādiet veicamo darbību."
+        self.request = request
         self.validity_check = self._is_option_valid
 
     def input(self):

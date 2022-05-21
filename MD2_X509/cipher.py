@@ -30,7 +30,7 @@ class cipher(object):
 
     def encrypt(self):
         """ Iekodē ziņojumu. """
-        if len(self.b_message) > 190:
+        if len(self.message) > 190:
             raise ValueError("Iekodējamais ziņojums ir par garu.")
         public_key = self.key
         ciphertext = public_key.encrypt(

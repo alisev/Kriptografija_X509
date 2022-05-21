@@ -2,7 +2,7 @@ import typing
 import os
 
 class inputFilename(object):
-    def __init__(self, request):
+    def __init__(self, request: str = "Norādiet faila nosaukumu."):
         self.error_message = "Fails neeksistē."
         self.request = request
         self.validity_check = self._is_file_valid
