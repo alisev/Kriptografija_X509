@@ -18,7 +18,7 @@ Darbs ar programmu:
 2) Pēc uzdevuma izpildīšanas tiks saglabāti rezultātu faili mapē 'output' vai arī uz ekrāna tiks parādīts paziņojums.
 
 ----
-Iekļautie piemēri mapē 'input':
+Mapē 'input' ir iekļauti piemēri. 
 
 Pirmajam uzdevuma solim:
  - input_01.json - Apraksta sertifikāta saturu. Šis fails tiek glabāts JSON formātā.
