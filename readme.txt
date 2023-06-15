@@ -1,3 +1,5 @@
+Komandrindiņas programma x.509 sertifikāta izveidošanai/pārbaudei un ziņojumu dekodēšanai/iekodēšanai.
+
 Programma ir uzrakstīta valodā Python 3.10 un izmanto vairākas bibliotēkas tās darbības nodrošināšanai:
 	- Crypto	Pycryptodome bibliotēka. Nodrošina iekodēšanu un atkodēšanu.
 	- datetime	Sērijas numura aprēķināšanai.
